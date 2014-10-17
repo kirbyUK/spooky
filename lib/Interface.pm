@@ -56,11 +56,16 @@ package Window
 sub new
 {
 	my $class = shift;
+
+	# Initialise curses:
 	Curses::initscr();
 	Curses::clear();
+
+	# Create the main window:
+	Curses::getmaxyx(my $y, my $x);
 	my $w = Window->new({
-		height => 25,
-		width => 50,
+		width => ($x - 20),
+		height => ($y - 20),
 		x => 10,
 		y => 10,
 	});
