@@ -1,6 +1,5 @@
 package Interface;
 use Curses;
-use Data::Dumper 'Dumper';
 
 # Lump windows in an easy-to-use package:
 package Window
@@ -76,7 +75,7 @@ sub new
 # Close curses:
 sub close
 {
-	endwin;
+	Curses::endwin;
 }
 
 # Draw the interface:
@@ -84,9 +83,9 @@ sub draw
 {
 	my $self = shift;
 	Curses::clear();
+	Curses::refresh;
 	my $windows = $self->{windows};
 	for my $win(@$windows) { $win->draw }
-	Curses::refresh;
 }
 
 1;
