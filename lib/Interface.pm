@@ -1,34 +1,25 @@
 package Interface;
 use Curses;
+use Data::Dumper 'Dumper';
 
 # Lump windows in an easy-to-use package:
 package Window
 {
+	# The box drawing chracters for the window's border:
 	my %BOX_CHARS =
 	(
 		corners =>
 		{
-			topleft => "+",
-			topright => "+",
-			bottomleft => "+",
-			bottomright => "+"
+			topleft => "┌",
+			topright => "┐",
+			bottomleft => "└",
+			bottomright => "┘"
 		},
-		horizontal => "-",
-		vertical => "|"
+		horizontal => "─",
+		vertical => "│"
 	);
-#	my %BOX_CHARS =
-#	(
-#		corners =>
-#		{
-#			topleft => "┌",
-#			topright => "┐",
-#			bottomleft => "└",
-#			bottomright => "┘"
-#		},
-#		horizontal => "─",
-#		vertical => "│"
-#	);
 
+	# Creates a new window:
 	sub new
 	{
 		my $class = shift;
@@ -42,12 +33,13 @@ package Window
 		bless $properties, $class;
 	}
 
+	# Draws the window:
 	sub draw
 	{
-		my $class = shift;
-		clear($class->window);
-		border(
-			$class->window,
+		my $self = shift;
+		Curses::clear($self->{window});
+		Curses::border(
+			$self->{window},
 			$BOX_CHARS{vertical},
 			$BOX_CHARS{vertical},
 			$BOX_CHARS{horizontal},
@@ -57,23 +49,19 @@ package Window
 			$BOX_CHARS{corners}{bottomleft},
 			$BOX_CHARS{corners}{bottomright}
 		);
-		refresh($class->window);
-	}
-
-	sub window
-	{
-		$$properties{window};
+		Curses::refresh($self->{window});
 	}
 };
 
+# Set up curses and the interface:
 sub new
 {
 	my $class = shift;
-	initscr();
-	clear();
+	Curses::initscr();
+	Curses::clear();
 	my $w = Window->new({
-		height => 50,
-		width => 200,
+		height => 25,
+		width => 50,
 		x => 10,
 		y => 10,
 	});
@@ -85,23 +73,20 @@ sub new
 	bless $stuff, $class;
 }
 
+# Close curses:
 sub close
 {
 	endwin;
 }
 
+# Draw the interface:
 sub draw
 {
-	my $class = shift;
-	my $windows = $class->windows;
+	my $self = shift;
+	Curses::clear();
+	my $windows = $self->{windows};
 	for my $win(@$windows) { $win->draw }
-	refresh;
-}
-
-sub windows
-{
-	my $class = shift;
-	$$stuff{windows};
+	Curses::refresh;
 }
 
 1;
