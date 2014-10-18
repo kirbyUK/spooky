@@ -53,8 +53,6 @@ package Window
 		# If we have anything else to print, print that:
 		if(defined $args)
 		{
-			open my $file, '>', "test";
-			print $file, "hi\n";
 			for my $drawable(@$args)
 			{
 				Curses::addstr(
@@ -83,6 +81,7 @@ sub new
 
 	# Initialise curses:
 	Curses::initscr();
+	Curses::curs_set(0);
 	Curses::clear();
 
 	# Create the main window:
