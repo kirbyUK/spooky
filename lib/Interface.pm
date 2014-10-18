@@ -82,6 +82,7 @@ sub new
 	# Initialise curses:
 	Curses::initscr();
 	Curses::curs_set(0);
+	Curses::noecho();
 	Curses::clear();
 
 	# Create the main window:
