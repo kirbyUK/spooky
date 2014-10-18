@@ -43,6 +43,16 @@ sub draw
 					text => "Speed:    ${\$char->stats->{speed}}",
 				},
 			],
+
+			# The textbox:
+			textbox =>
+			[
+				{
+					x => 1,
+					y => 1,
+					text => "test string",
+				}
+			],
 		},
 	);
 }

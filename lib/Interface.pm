@@ -104,6 +104,13 @@ sub new
 				x => 8,
 				y => ($y - 7),
 			}),
+
+			textbox => Window->new({
+				width => (($x - 16) - 22),
+				height => 5,
+				x => 30,
+				y => ($y - 7),
+			}),
 		},
 	};
 	bless $properties, $class;
