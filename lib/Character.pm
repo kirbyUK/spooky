@@ -12,6 +12,14 @@ sub new
 			y => 100,
 		},
 
+		# The characters stats (these are initalised with generate_new_stats):
+		stats =>
+		{
+			strength => 0,
+			defence => 0,
+			speed => 0,
+		},
+
 		# The amount of candy the player has:
 		candy => 5,
 	};

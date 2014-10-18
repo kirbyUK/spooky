@@ -116,10 +116,26 @@ sub new
 	bless $properties, $class;
 }
 
-# Close curses:
-sub close
+# Various input forms:
+sub input_yesno
 {
-	Curses::endwin;
+	my $input;
+	while(($input = Curses::getch) !~ /^[YyNn\n]$/) { };
+	if($input =~ /^[Yy\n]$/) { return 1; } else { return 0; }
+}
+
+# Sets the text within the textbox:
+sub set_textbox
+{
+	my $self = shift;
+	$self->{textbox} = shift;
+}
+
+# Gets the textbox text:
+sub get_textbox
+{
+	my $self = shift;
+	$self->{textbox};
 }
 
 # Draw the interface:
@@ -131,8 +147,14 @@ sub draw
 	Curses::refresh;
 	for my $win(keys %{$self->{windows}})
 	{
-		$self->{windows}{$win}->draw($args->{$win});
+		$self->{windows}->{$win}->draw($args->{$win});
 	}
+}
+
+# Close curses:
+sub close
+{
+	Curses::endwin;
 }
 
 1;
