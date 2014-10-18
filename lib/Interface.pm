@@ -1,5 +1,6 @@
 package Interface;
 use Curses;
+use Data::Dumper;
 
 # Lump windows in an easy-to-use package:
 package Window
@@ -36,6 +37,7 @@ package Window
 	sub draw
 	{
 		my $self = shift;
+		my $args = shift;
 		Curses::clear($self->{window});
 		Curses::border(
 			$self->{window},
@@ -48,7 +50,29 @@ package Window
 			$BOX_CHARS{corners}{bottomleft},
 			$BOX_CHARS{corners}{bottomright}
 		);
+		# If we have anything else to print, print that:
+		if(defined $args)
+		{
+			open my $file, '>', "test";
+			print $file, "hi\n";
+			for my $drawable(@$args)
+			{
+				Curses::addstr(
+					$self->window,
+					$drawable->{y} + 1,
+					$drawable->{x} + 1,
+					$drawable->{text}
+				);
+			}
+		}
 		Curses::refresh($self->{window});
+	}
+
+	# Returns the Curses::Window object:
+	sub window
+	{
+		my $self = shift;
+		$self->{window};
 	}
 };
 
@@ -63,18 +87,26 @@ sub new
 
 	# Create the main window:
 	Curses::getmaxyx(my $y, my $x);
-	my $w = Window->new({
-		width => ($x - 20),
-		height => ($y - 20),
-		x => 10,
-		y => 10,
-	});
-	my $stuff = {
-		windows => [
-			$w,
-		],
+	my $properties =
+	{
+		windows =>
+		{
+			main => Window->new({
+				width => ($x - 16),
+				height => ($y - 16),
+				x => 8,
+				y => 8,
+			}),
+
+			stats => Window->new({
+				width => 19,
+				height => 5,
+				x => 8,
+				y => ($y - 7),
+			}),
+		},
 	};
-	bless $stuff, $class;
+	bless $properties, $class;
 }
 
 # Close curses:
@@ -87,10 +119,13 @@ sub close
 sub draw
 {
 	my $self = shift;
+	my $args = shift;
 	Curses::clear();
 	Curses::refresh;
-	my $windows = $self->{windows};
-	for my $win(@$windows) { $win->draw }
+	for my $win(keys %{$self->{windows}})
+	{
+		$self->{windows}{$win}->draw($args->{$win});
+	}
 }
 
 1;
