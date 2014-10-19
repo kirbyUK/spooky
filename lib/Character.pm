@@ -1,4 +1,5 @@
 package Character;
+use POSIX;
 
 sub new
 {
@@ -61,11 +62,16 @@ sub candy
 sub generate_new_stats
 {
 	my $self = shift;
+	my $a = int(rand(25) + 5);
+	my $b = int(rand(30) + 5);
+	my $c = int(rand(25) + 5);
+	my $k = (($a + $b + $c) / 30);
+	my @values = map { floor($_ /= $k) } ($a, $b, $c);
 	$self->{stats} =
 	{
-		strength => 10,
-		defence => 10,
-		speed => 10,
+		strength => $values[0],
+		defence => $values[1],
+		speed => $values[2],
 	};
 }
 
