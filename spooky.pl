@@ -23,6 +23,9 @@ do
 	&draw;
 } while(! $interface->input_yesno);
 
+$interface->reset_textbox;
+&draw;
+
 Curses::getch;
 
 # Close the interface:

@@ -138,6 +138,13 @@ sub get_textbox
 	$self->{textbox};
 }
 
+# Resets the textbox text to empty:
+sub reset_textbox
+{
+	my $self = shift;
+	$self->{textbox} = { x => 0, y => 0, text => "" };
+}
+
 # Draw the interface:
 sub draw
 {
