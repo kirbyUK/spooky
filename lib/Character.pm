@@ -9,8 +9,8 @@ sub new
 		# The position (relative to the main window, not stdscr):
 		position =>
 		{
-			x => 100,
-			y => 100,
+			x => 25,
+			y => 25,
 		},
 
 		# The characters stats (these are initalised with generate_new_stats):

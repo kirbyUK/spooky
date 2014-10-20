@@ -1,6 +1,5 @@
 package Interface;
 use Curses;
-use Data::Dumper;
 
 # Lump windows in an easy-to-use package:
 package Window
@@ -71,6 +70,13 @@ package Window
 	{
 		my $self = shift;
 		$self->{window};
+	}
+
+	# Returns the dimensions:
+	sub dimensions
+	{
+		my $self = shift;
+		{ width => $self->{width}, height => $self->{height} };
 	}
 };
 
@@ -143,6 +149,14 @@ sub reset_textbox
 {
 	my $self = shift;
 	$self->{textbox} = { x => 0, y => 0, text => "" };
+}
+
+# Get a given window's dimensions:
+sub get_window_dimensions
+{
+	my $self = shift;
+	my $window = shift;
+	$self->{windows}->{$window}->dimensions;
 }
 
 # Draw the interface:

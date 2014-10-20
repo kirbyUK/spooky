@@ -2,6 +2,7 @@
 use strict;
 use Character;
 use Interface;
+use Map;
 
 # I am so, SO sorry...
 
@@ -12,14 +13,17 @@ srand time;
 my $interface = Interface->new;
 
 # Make the character:
-my $char = Character->new;
+my $player = Character->new;
+
+# Make the map:
+my $map = Map->new;
 
 # Generate a stat spread the player is happy with:
 $interface->set_textbox({ text => "Is this stat spead ok? [Y\\n]",
 	x => 1, y => 1 });
 do
 {
-	$char->generate_new_stats;
+	$player->generate_new_stats;
 	&draw;
 } while(! $interface->input_yesno);
 
@@ -36,23 +40,32 @@ sub draw
 {
 	my $ref =
 	{
+		# The main window
+		main => $map->get_map_slice
+		({
+			x => $player->position->{x},
+			y => $player->position->{y},
+			width => $interface->get_window_dimensions("main")->{width},
+			height => $interface->get_window_dimensions("main")->{height},
+		}),
+
 		# The stats window:
 		stats =>
 		[
 			{
 				x => 0,
 				y => 0,
-				text => "Strength: ${\$char->stats->{strength}}",
+				text => "Strength: ${\$player->stats->{strength}}",
 			},
 			{
 				x => 0,
 				y => 1,
-				text => "Defence:  ${\$char->stats->{defence}}",
+				text => "Defence:  ${\$player->stats->{defence}}",
 			},
 			{
 				x => 0,
 				y => 2,
-				text => "Speed:    ${\$char->stats->{speed}}",
+				text => "Speed:    ${\$player->stats->{speed}}",
 			},
 		],
 
