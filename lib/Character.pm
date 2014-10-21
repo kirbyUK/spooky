@@ -27,6 +27,12 @@ sub new
 	bless $properties, $class;
 }
 
+# The symbol we use to identify the character on screen:
+sub symbol
+{
+	die "Attempt to call Character::symbol called!\n";
+}
+
 # Modifies the player's position:
 sub move
 {
@@ -62,10 +68,11 @@ sub candy
 sub generate_new_stats
 {
 	my $self = shift;
-	my $a = int(rand(25) + 5);
-	my $b = int(rand(30) + 5);
-	my $c = int(rand(25) + 5);
-	my $k = (($a + $b + $c) / 30);
+	my $total = shift;
+	my $a = int(rand($total - 5) + 5);
+	my $b = int(rand($total - 5) + 5);
+	my $c = int(rand($total - 5) + 5);
+	my $k = (($a + $b + $c) / $total);
 	my @values = map { floor($_ /= $k) } ($a, $b, $c);
 	$self->{stats} =
 	{
@@ -80,6 +87,14 @@ sub stats
 {
 	my $self = shift;
 	$self->{stats};
+}
+
+# Returns an anonymous hash reference that can be passed to Window::draw
+sub get_drawable
+{
+	my $self = shift;
+	return { x => $self->{position}->{x}, y => $self->position->{y},
+		text => $self->symbol };
 }
 
 1;

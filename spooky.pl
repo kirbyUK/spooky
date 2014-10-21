@@ -1,6 +1,8 @@
 #!/usr/bin/perl -w -Ilib
 use strict;
 use Character;
+use Player;
+use Enemy;
 use Interface;
 use Map;
 
@@ -10,44 +12,54 @@ use Map;
 srand time;
 
 # Initialise the interface:
-my $interface = Interface->new;
+our $interface = Interface->new;
 
 # Make the character:
-my $player = Character->new;
+our $player = Player->new;
 
 # Make the map:
-my $map = Map->new;
+our $map = Map->new;
 
-# Generate a stat spread the player is happy with:
-$interface->set_textbox({ text => "Is this stat spead ok? [Y\\n]",
-	x => 1, y => 1 });
-do
+&main;
+
+# The main function:
+sub main
 {
-	$player->generate_new_stats;
+	# Generate a stat spread the player is happy with:
+	$interface->set_textbox({ text => "Is this stat spead ok? [Y\\n]",
+		x => 1, y => 1 });
+	do
+	{
+		$player->generate_new_stats(30);
+		&draw;
+	} while(! $interface->input_yesno);
+
+	$interface->reset_textbox;
 	&draw;
-} while(! $interface->input_yesno);
 
-$interface->reset_textbox;
-&draw;
+	Curses::getch;
 
-Curses::getch;
-
-# Close the interface:
-$interface->close;
+	# Close the interface:
+	$interface->close;
+}
 
 # Draws all the stuff needed:
 sub draw
 {
+	# There is a lot to draw to the main window, so let's deal with all that:
+	my $main = $map->get_map_slice
+	({
+		x => $player->position->{x},
+		y => $player->position->{y},
+		width => $interface->get_window_dimensions("main")->{width},
+		height => $interface->get_window_dimensions("main")->{height},
+	});
+	push @$main, $player->get_drawable;
+
 	my $ref =
 	{
 		# The main window
-		main => $map->get_map_slice
-		({
-			x => $player->position->{x},
-			y => $player->position->{y},
-			width => $interface->get_window_dimensions("main")->{width},
-			height => $interface->get_window_dimensions("main")->{height},
-		}),
+		main => $main,
 
 		# The stats window:
 		stats =>
