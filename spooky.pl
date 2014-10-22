@@ -17,6 +17,9 @@ our $interface = Interface->new;
 # Make the character:
 our $player = Player->new(20);
 
+# An array to hold all the enemies:
+our @enemies = ();
+
 # Make the map:
 our $map = Map->new;
 
@@ -37,6 +40,13 @@ sub main
 	$interface->reset_textbox;
 	&draw;
 
+	# The difficulty modifier that controls things like enemy stats and spawn
+	# rate:
+	my $difficulty_mod = 0.1;
+
+	# The number of frames we've been through:
+	my $frame = 0;
+
 	# The main game loop:
 	while($player->health > 0)
 	{
@@ -46,8 +56,20 @@ sub main
 		# Move the player:
 		$player->move($interface->get_vector($input));
 
+		# Possible generate a new enemy:
+		if(rand(3) <= $difficulty_mod)
+		{
+			my $enemy = Enemy->new(int($difficulty_mod * 50));
+			$enemy->move({ x => int(rand($map->get_size->{x})),
+				y => int(rand($map->get_size->{y})) });
+
+			push @enemies, $enemy;
+		}
+
 		# Draw the frame:
 		&draw;
+		$frame++;
+		$difficulty_mod += 0.2;
 	}
 
 	# Close the interface:
@@ -66,6 +88,7 @@ sub draw
 		height => $interface->get_window_dimensions("main")->{height},
 	});
 	push @$main, $player->get_drawable;
+	for(@enemies) { push @$main, $_->get_drawable; }
 
 	my $ref =
 	{

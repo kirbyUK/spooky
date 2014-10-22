@@ -19,7 +19,7 @@ sub new
 sub get_size
 {
 	my $self = shift;
-	return { x => @$self[0], y => @$self };
+	return { x => scalar @{$self->[0]}, y => scalar @{$self} };
 }
 
 sub get_map_slice
