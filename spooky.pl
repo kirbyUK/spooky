@@ -5,7 +5,6 @@ use Player;
 use Enemy;
 use Interface;
 use Map;
-use Title;
 
 # I am so, SO sorry...
 
@@ -29,8 +28,6 @@ our $map = Map->new;
 # The main function:
 sub main
 {
-	Title::get_title;
-
 	# Generate a stat spread the player is happy with:
 	$interface->set_textbox({ text => "Is this stat spread ok? [Y\\n]",
 		x => 1, y => 3 });
