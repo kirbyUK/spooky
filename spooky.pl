@@ -60,11 +60,14 @@ sub main
 		if(rand(3) <= $difficulty_mod)
 		{
 			my $enemy = Enemy->new(int($difficulty_mod * 50));
-			$enemy->move({ x => int(rand($map->get_size->{x})),
+			$enemy->set_position({ x => int(rand($map->get_size->{x})),
 				y => int(rand($map->get_size->{y})) });
 
 			push @enemies, $enemy;
 		}
+
+		# Move the enemies:
+		for(@enemies) { $_->move($player); }
 
 		# Draw the frame:
 		&draw;
