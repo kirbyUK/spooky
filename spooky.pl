@@ -72,7 +72,7 @@ sub main
 		# Draw the frame:
 		&draw;
 		$frame++;
-		$difficulty_mod += 0.2;
+		$difficulty_mod += 0.1 if(($frame % 10) == 0);
 	}
 
 	# Close the interface:
