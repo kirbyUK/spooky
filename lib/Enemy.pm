@@ -1,6 +1,5 @@
 package Enemy;
 use parent qw(Character);
-use Data::Dumper;
 
 sub symbol { "X" }
 
