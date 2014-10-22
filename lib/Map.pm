@@ -32,12 +32,12 @@ sub get_map_slice
 	if($x_min < 0)
 	{
 		$x_min = 0;
-		$x_max = $width;
+		$x_max = $width - 1;
 	}
 	if($x_max > @{$self->[0]})
 	{
 		$x_max = @{$self->[0]};
-		$x_min = (@{$self->[0]} - $width);
+		$x_min = (@{$self->[0]} - $width) - 1;
 	}
 	if($y_min < 0)
 	{
