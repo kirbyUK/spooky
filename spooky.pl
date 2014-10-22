@@ -27,7 +27,7 @@ sub main
 {
 	# Generate a stat spread the player is happy with:
 	$interface->set_textbox({ text => "Is this stat spread ok? [Y\\n]",
-		x => 1, y => 1 });
+		x => 1, y => 3 });
 	do
 	{
 		$player->generate_new_stats(30);
@@ -89,6 +89,21 @@ sub draw
 				x => 0,
 				y => 2,
 				text => "Speed:    ${\$player->stats->{speed}}",
+			},
+			{
+				x => 0,
+				y => 3,
+				text => "-----------------",
+			},
+			{
+				x => 0,
+				y => 4,
+				text => "Health:   ${\$player->health}",
+			},
+			{
+				x => 0,
+				y => 5,
+				text => "Candy:    ${\$player->candy}",
 			},
 		],
 
