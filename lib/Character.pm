@@ -44,6 +44,22 @@ sub move
 	my $vector = shift;
 	$self->{position}->{x} += $vector->{x};
 	$self->{position}->{y} += $vector->{y};
+	if($self->{position}->{x} < 0)
+	{
+		$self->{position}->{x} = 0;
+	}
+	elsif($self->{position}->{x} > $main::map->get_size->{x})
+	{
+		$self->{position}->{x} = $main::map->get_size->{x};
+	}
+	if($self->{position}->{y} < 0)
+	{
+		$self->{position}->{y} = 0;
+	}
+	elsif($self->{position}->{y} > $main::map->get_size->{y})
+	{
+		$self->{position}->{y} = $main::map->get_size->{y};
+	}
 }
 
 # Returns the player's position:

@@ -16,6 +16,12 @@ sub new
 	bless \@map, $class;
 }
 
+sub get_size
+{
+	my $self = shift;
+	return { x => @$self[0], y => @$self };
+}
+
 sub get_map_slice
 {
 	my $self = shift;
