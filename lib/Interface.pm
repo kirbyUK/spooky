@@ -9,14 +9,26 @@ package Window
 	(
 		corners =>
 		{
-			topleft => "┌",
-			topright => "┐",
-			bottomleft => "└",
-			bottomright => "┘"
+			topleft => "#",
+			topright => "#",
+			bottomleft => "#",
+			bottomright => "#"
 		},
-		horizontal => "─",
-		vertical => "│"
+		horizontal => "-",
+		vertical => "|"
 	);
+#	my %BOX_CHARS =
+#	(
+#		corners =>
+#		{
+#			topleft => "┌",
+#			topright => "┐",
+#			bottomleft => "└",
+#			bottomright => "┘"
+#		},
+#		horizontal => "─",
+#		vertical => "│"
+#	);
 
 	# Creates a new window:
 	sub new
@@ -138,7 +150,7 @@ sub set_textbox
 }
 
 # Gets the textbox text:
-sub get_textbox
+sub textbox
 {
 	my $self = shift;
 	$self->{textbox};
@@ -176,6 +188,23 @@ sub draw
 sub close
 {
 	Curses::endwin;
+}
+
+# Takes a character and returns up/down/left/right vectors:
+sub get_vector
+{
+	my $self = shift;
+	my $char = shift;
+
+	# Left is 'a' (WASD) or 'h' (Vim):
+	return { x => -1, y => 0 } if($char =~ /[ah]/i);
+	# Right is 'd' (WASD) or 'l' (Vim):
+	return { x => 1, y => 0 } if ($char =~ /[dl]/i);
+	# Up is 'w' (WASD) or 'k' (Vim):
+	return { x => 0, y => -1 } if ($char =~ /[wk]/i);
+	# Down is 's' (WASD) or 'j' (Vim):
+	return { x => 0, y => 1 } if ($char =~ /[sj]/i);
+	return { x => 0, y => 0 };
 }
 
 1;

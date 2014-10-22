@@ -4,13 +4,14 @@ use POSIX;
 sub new
 {
 	my $class = shift;
+	my $health = shift;
 	my $properties =
 	{
 		# The position (relative to the main window, not stdscr):
 		position =>
 		{
-			x => 25,
-			y => 25,
+			x => 0,
+			y => 0,
 		},
 
 		# The characters stats (these are initalised with generate_new_stats):
@@ -20,6 +21,9 @@ sub new
 			defence => 0,
 			speed => 0,
 		},
+
+		# The amount of health the character has:
+		health => $health,
 
 		# The amount of candy the player has:
 		candy => 5,
@@ -47,6 +51,21 @@ sub position
 {
 	my $self = shift;
 	$self->{position};
+}
+
+# Adds the given amount of health:
+sub add_health
+{
+	my $self = shift;
+	my $value = shift;
+	$self->{health} += $value;
+}
+
+# Gets health:
+sub health
+{
+	my $self = shift;
+	$self->{health};
 }
 
 # Adds the given amount of candy:

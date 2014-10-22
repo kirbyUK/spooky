@@ -15,7 +15,7 @@ srand time;
 our $interface = Interface->new;
 
 # Make the character:
-our $player = Player->new;
+our $player = Player->new(20);
 
 # Make the map:
 our $map = Map->new;
@@ -37,7 +37,18 @@ sub main
 	$interface->reset_textbox;
 	&draw;
 
-	Curses::getch;
+	# The main game loop:
+	while($player->health > 0)
+	{
+		# Get input:
+		my $input = Curses::getch;
+
+		# Move the player:
+		$player->move($interface->get_vector($input));
+
+		# Draw the frame:
+		&draw;
+	}
 
 	# Close the interface:
 	$interface->close;
@@ -82,7 +93,7 @@ sub draw
 		],
 
 		# The textbox:
-		textbox => [ $interface->get_textbox ],
+		textbox => [ $interface->textbox ],
 	};
 	$interface->draw($ref);
 }
