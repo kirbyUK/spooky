@@ -20,29 +20,36 @@ sub get_map_slice
 {
 	my $self = shift;
 	my $rect = shift;
-	my ($x_min, $y_min, $x_max, $y_max, $width, $height);
+
 	$width = $rect->{width} - 2;
 	$height = $rect->{height} - 2;
-	if(($rect->{x} - $width) > 0)
-	{
-		$x_min = int($rect->{x} - ($width / 2));
-		$x_max = int($rect->{x} + ($width / 2));
-	}
-	else
+	$x_min = int($rect->{x} - ($width / 2));
+	$x_max = int($rect->{x} + ($width / 2));
+	$y_min = int($rect->{y} - ($height / 2));
+	$y_max = int($rect->{y} + ($height / 2));
+
+	# Check if these values are valid and change them if not:
+	if($x_min < 0)
 	{
 		$x_min = 0;
-		$x_max = $width - 1;
+		$x_max = $width;
 	}
-	if(($rect->{y} - ($height / 2)) > 0)
+	if($x_max > @{$self->[0]})
 	{
-		$y_min = int($rect->{y} - ($height / 2));
-		$y_max = int($rect->{y} + ($height / 2));
+		$x_max = @{$self->[0]};
+		$x_min = (@{$self->[0]} - $width);
 	}
-	else
+	if($y_min < 0)
 	{
 		$y_min = 0;
-		$y_max = $height - 1;
+		$y_max = $height;
 	}
+	if($y_max > @$self)
+	{
+		$y_max = @$self;
+		$y_min = (@$self - $height);
+	}
+
 	# Get a slice of the map and convert it to a format Interface::draw likes
 	# (an array reference containing hash references):
 	my @slice;
