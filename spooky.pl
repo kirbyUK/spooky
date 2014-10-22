@@ -26,7 +26,7 @@ our $map = Map->new;
 sub main
 {
 	# Generate a stat spread the player is happy with:
-	$interface->set_textbox({ text => "Is this stat spead ok? [Y\\n]",
+	$interface->set_textbox({ text => "Is this stat spread ok? [Y\\n]",
 		x => 1, y => 1 });
 	do
 	{
