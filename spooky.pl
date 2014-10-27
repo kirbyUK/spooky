@@ -5,6 +5,7 @@ use Player;
 use Enemy;
 use Interface;
 use Map;
+use Encounter;
 
 # I am so, SO sorry...
 
@@ -29,8 +30,8 @@ our $map = Map->new;
 sub main
 {
 	# Generate a stat spread the player is happy with:
-	$interface->set_textbox({ text => "Is this stat spread ok? [Y\\n]",
-		x => 1, y => 3 });
+	$interface->set_textbox([{ text => "Is this stat spread ok? [Y\\n]",
+		x => 1, y => 3 }]);
 	do
 	{
 		$player->generate_new_stats(30);
@@ -39,6 +40,9 @@ sub main
 
 	$interface->reset_textbox;
 	&draw;
+
+	# Any enouncters that are ongoing or in the queue:
+	my @encounters;
 
 	# The difficulty modifier that controls things like enemy stats and spawn
 	# rate:
@@ -50,29 +54,78 @@ sub main
 	# The main game loop:
 	while($player->health > 0)
 	{
-		# Get input:
-		my $input = Curses::getch;
-
-		# Move the player:
-		$player->move($interface->get_vector($input));
-
-		# Possible generate a new enemy:
-		if(rand(3) <= $difficulty_mod)
+		# No movement happens while we're in an encounter:
+		if(@encounters == 0)
 		{
-			my $enemy = Enemy->new(int($difficulty_mod * 50));
-			$enemy->set_position({ x => int(rand($map->get_size->{x})),
-				y => int(rand($map->get_size->{y})) });
+			# Get input:
+			my $input = Curses::getch;
 
-			push @enemies, $enemy;
+			# Move the player:
+			$player->move($interface->get_vector($input));
+
+			# Possible generate a new enemy:
+			if(rand(3) <= $difficulty_mod)
+			{
+				my $enemy = Enemy->new(int($difficulty_mod * 10));
+				$enemy->set_position({ x => int(rand($map->get_size->{x})),
+					y => int(rand($map->get_size->{y})) });
+
+				push @enemies, $enemy;
+			}
+
+			# Move the enemies:
+			for(@enemies) { $_->move($player); }
+
+			# Check for any adjascent enemies:
+			for my $enemy(@enemies)
+			{
+				my %enemy_pos = %{$enemy->position};
+				my %pos = %{$player->position};
+				for(my $i; $i < 3; $i++)
+				{
+					for(my $j; $j < 3; $j++)
+					{
+						if((($enemy_pos{x} + $j) == $pos{x}) &&
+						($enemy_pos{y} + $i) == $pos{y})
+						{
+							my $encounter = Encounter->new($player, $enemy);
+							push @encounters, $encounter;
+						}
+					}
+				}
+			}
 		}
+		# Otherwise, process the ongoing encounter:
+		else
+		{
+			$interface->set_textbox($encounters[0]->menu);
+			&draw;
+			my $input = Curses::getch;
 
-		# Move the enemies:
-		for(@enemies) { $_->move($player); }
+			# Check the input:
+			if($input =~ /^[wk]$/) { $encounters[0]->move_selection(-1); }
+			if($input =~ /^[sj]$/) { $encounters[0]->move_selection(1);  }
+			if($input =~ /^\n$/)   { $encounters[0]->perform_action;     }
+
+			# If the encounter is over, destroy it and reset the textbox:
+			if($encounters[0]->is_over)
+			{
+				$interface->reset_textbox;
+				for(my $i = 0; $i < @enemies; $i++)
+				{
+					if($enemies[$i] == $encounters[0]->enemy)
+					{
+						splice(@enemies, $i, 1);
+						last;
+					}
+				}
+				shift @encounters;
+			}
+		}
 
 		# Draw the frame:
 		&draw;
-		$frame++;
-		$difficulty_mod += 0.1 if(($frame % 10) == 0);
+		$difficulty_mod += 0.1 if(($frame++ % 10) == 0);
 	}
 
 	# Close the interface:
@@ -134,7 +187,7 @@ sub draw
 		],
 
 		# The textbox:
-		textbox => [ $interface->textbox ],
+		textbox => $interface->textbox,
 	};
 	$interface->draw($ref);
 }

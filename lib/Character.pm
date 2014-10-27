@@ -124,6 +124,19 @@ sub stats
 	$self->{stats};
 }
 
+# Gets the sum of the base stats and the buffs:
+sub total_stats
+{
+	my $self = shift;
+	my $total = { };
+	for my $stat(qw/strength defence speed/)
+	{
+#		$total->{$stat} = $self->{stats}->{$stat} + $self->{buffs}->{$stat};
+		$total->{$stat} = $self->{stats}->{$stat};
+	}
+	$total;
+}
+
 # Returns an anonymous hash reference that can be passed to Window::draw
 sub get_drawable
 {

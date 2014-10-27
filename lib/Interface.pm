@@ -160,7 +160,7 @@ sub textbox
 sub reset_textbox
 {
 	my $self = shift;
-	$self->{textbox} = { x => 0, y => 0, text => "" };
+	$self->{textbox} = [ { x => 0, y => 0, text => "" } ];
 }
 
 # Get a given window's dimensions:
