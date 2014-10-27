@@ -104,6 +104,7 @@ sub generate_new_stats
 {
 	my $self = shift;
 	my $total = shift;
+	if($total < 1) { $total = 2 };
 	my $a = int(rand($total - 5) + 5);
 	my $b = int(rand($total - 5) + 5);
 	my $c = int(rand($total - 5) + 5);

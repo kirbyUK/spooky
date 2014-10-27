@@ -70,6 +70,7 @@ sub main
 				$enemy->set_position({ x => int(rand($map->get_size->{x})),
 					y => int(rand($map->get_size->{y})) });
 
+				$enemy->generate_new_stats(int(rand(2) * $difficulty_mod * 15));
 				push @enemies, $enemy;
 			}
 
