@@ -104,9 +104,9 @@ sub main
 			my $input = Curses::getch;
 
 			# Check the input:
-			if($input =~ /^[wk]$/) { $encounters[0]->move_selection(-1); }
-			if($input =~ /^[sj]$/) { $encounters[0]->move_selection(1);  }
-			if($input =~ /^\n$/)   { $encounters[0]->perform_action;     }
+			if($input =~ /^[wk]$/i) { $encounters[0]->move_selection(-1); }
+			if($input =~ /^[sj]$/i) { $encounters[0]->move_selection(1);  }
+			if($input =~ /^\n$/)    { $encounters[0]->perform_action;     }
 
 			# If the encounter is over, destroy it and reset the textbox:
 			if($encounters[0]->is_over)
