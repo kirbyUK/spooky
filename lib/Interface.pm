@@ -118,14 +118,14 @@ sub new
 
 			stats => Window->new({
 				width => 19,
-				height => 8,
+				height => 7,
 				x => 8,
 				y => ($y - 9),
 			}),
 
 			textbox => Window->new({
 				width => (($x - 16) - 22),
-				height => 8,
+				height => 7,
 				x => 30,
 				y => ($y - 9),
 			}),

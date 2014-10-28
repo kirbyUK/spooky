@@ -27,6 +27,12 @@ sub new
 
 		# The amount of candy the player has:
 		candy => 5,
+
+		# A full list of costumes available to the player:
+		costumes => [ ],
+
+		# The character's current costume:
+		costume => { name => "", buffs => { strength => 0, defence => 0 } },
 	};
 	bless $properties, $class;
 }
@@ -130,10 +136,10 @@ sub total_stats
 {
 	my $self = shift;
 	my $total = { };
-	for my $stat(qw/strength defence speed/)
+	for my $stat(qw/strength defence/)
 	{
-#		$total->{$stat} = $self->{stats}->{$stat} + $self->{buffs}->{$stat};
-		$total->{$stat} = $self->{stats}->{$stat};
+		$total->{$stat} = $self->{stats}->{$stat} +
+			$self->{costume}->{buffs}->{$stat};
 	}
 	$total;
 }
@@ -144,6 +150,32 @@ sub get_drawable
 	my $self = shift;
 	return { x => $self->{position}->{x}, y => $self->position->{y},
 		text => $self->symbol };
+}
+
+# Adds a costume to the list of available costumes:
+sub add_costume
+{
+	my $self = shift;
+	my $costume = shift;
+	push @{$self->{costumes}}, $costume;
+}
+
+# Sets the character's costume:
+sub set_costume
+{
+	my $self = shift;
+	my $value = shift;
+	if(defined $self->{costumes}->[$value])
+	{
+		$self->{costume} = $self->{costumes}->[$value];
+	}
+}
+
+# Gets the character's costume:
+sub costume
+{
+	my $self = shift;
+	$self->{costume};
 }
 
 1;

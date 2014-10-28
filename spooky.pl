@@ -6,6 +6,7 @@ use Enemy;
 use Interface;
 use Map;
 use Encounter;
+use Costume;
 
 # I am so, SO sorry...
 
@@ -29,9 +30,15 @@ our $map = Map->new;
 # The main function:
 sub main
 {
+	my $costumes = Costume->new;
+
+	# Set the player's costume:
+	$player->add_costume($$costumes[0]);
+	$player->set_costume(0);
+
 	# Generate a stat spread the player is happy with:
 	$interface->set_textbox([{ text => "Is this stat spread ok? [Y\\n]",
-		x => 1, y => 3 }]);
+		x => 1, y => 2 }]);
 	do
 	{
 		$player->generate_new_stats(30);
@@ -161,29 +168,34 @@ sub draw
 				text => "Strength: ${\$player->stats->{strength}}",
 			},
 			{
+				x => 13,
+				y => 0,
+				text => "(+${\$player->costume->{buffs}->{strength}})",
+			},
+			{
 				x => 0,
 				y => 1,
 				text => "Defence:  ${\$player->stats->{defence}}",
 			},
 			{
-				x => 0,
-				y => 2,
-				text => "Speed:    ${\$player->stats->{speed}}",
+				x => 13,
+				y => 1,
+				text => "(+${\$player->costume->{buffs}->{defence}})",
 			},
 			{
 				x => 0,
-				y => 3,
+				y => 2,
 				text => "-" x ($interface->get_window_dimensions("stats")->
 					{width} - 2),
 			},
 			{
 				x => 0,
-				y => 4,
+				y => 3,
 				text => "Health:   ${\$player->health}",
 			},
 			{
 				x => 0,
-				y => 5,
+				y => 4,
 				text => "Candy:    ${\$player->candy}",
 			},
 		],

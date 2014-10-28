@@ -33,17 +33,14 @@ sub new
 
 				$player->add_health(-$player_dmg);
 				$enemy->add_health(-$enemy_dmg);
-
-				# Highest speed goes first, player if tie:
-#				if($p_stats{speed} >= $e_stats{speed})
-#				{
-#				}
-#				else
-#				{
-#				}
 			}
 		},
 	];
+
+	if(defined $player->costume->{attack})
+	{
+		push @$menu, $player->costume->{attack};
+	}
 
 	bless { player => $player, enemy => $enemy, selected => 0, menu => $menu },
 		$class;
