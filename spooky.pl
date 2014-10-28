@@ -173,7 +173,8 @@ sub draw
 			{
 				x => 0,
 				y => 3,
-				text => "-" x ($interface->window->dimensions->{width} - 2),
+				text => "-" x ($interface->get_window_dimensions("stats")->
+					{width} - 2),
 			},
 			{
 				x => 0,
