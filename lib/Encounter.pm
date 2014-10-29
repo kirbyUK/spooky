@@ -17,10 +17,11 @@ sub new
 			text => "Attack",
 			sub => sub
 			{
+				open my $file, '>>', "stats";
 				my $player = shift;
 				my $enemy = shift;
 				my %p_stats = %{$player->total_stats};
-				my %s_stats = %{$enemy->total_stats};
+				my %e_stats = %{$enemy->total_stats};
 
 				my $enemy_dmg =
 					int(($p_stats{strength} - $e_stats{defence}) * rand(1));
