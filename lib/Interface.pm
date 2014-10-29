@@ -116,18 +116,25 @@ sub new
 				y => 6,
 			}),
 
+			costume => Window->new({
+				width => ($x - 16),
+				height => 3,
+				x => 8,
+				y => ($y - 10)
+			}),
+
 			stats => Window->new({
 				width => 19,
 				height => 7,
 				x => 8,
-				y => ($y - 9),
+				y => ($y - 7),
 			}),
 
 			textbox => Window->new({
 				width => (($x - 16) - 22),
 				height => 7,
 				x => 30,
-				y => ($y - 9),
+				y => ($y - 7),
 			}),
 		},
 	};

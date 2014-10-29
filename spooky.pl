@@ -32,6 +32,9 @@ sub main
 {
 	my $costumes = Costume->new;
 
+	# As we defeat enemies, we traverse the costume array to get better ones:
+	my $costume_value = 0;
+
 	# Set the player's costume:
 	$player->add_costume($$costumes[0]);
 	$player->set_costume(0);
@@ -77,7 +80,7 @@ sub main
 				$enemy->set_position({ x => int(rand($map->get_size->{x})),
 					y => int(rand($map->get_size->{y})) });
 
-				$enemy->generate_new_stats(int(rand(2) * $difficulty_mod * 150));
+				$enemy->generate_new_stats(int(rand(2) * $difficulty_mod * 50));
 				push @enemies, $enemy;
 			}
 
@@ -202,6 +205,17 @@ sub draw
 
 		# The textbox:
 		textbox => $interface->textbox,
+
+		# The player's current costume:
+		costume =>
+		[
+			{
+				x => (($interface->get_window_dimensions("costume")->{width} -
+						length($player->costume->{name})) / 2),
+				y => 0,
+				text => $player->costume->{name},
+			}
+		],
 	};
 	$interface->draw($ref);
 }
