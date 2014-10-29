@@ -41,7 +41,7 @@ sub main
 		x => 1, y => 2 }]);
 	do
 	{
-		$player->generate_new_stats(30);
+		$player->generate_new_stats(20);
 		&draw;
 	} while(! $interface->input_yesno);
 
@@ -77,7 +77,7 @@ sub main
 				$enemy->set_position({ x => int(rand($map->get_size->{x})),
 					y => int(rand($map->get_size->{y})) });
 
-				$enemy->generate_new_stats(int(rand(2) * $difficulty_mod * 15));
+				$enemy->generate_new_stats(int(rand(2) * $difficulty_mod * 150));
 				push @enemies, $enemy;
 			}
 

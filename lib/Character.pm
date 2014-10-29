@@ -19,7 +19,6 @@ sub new
 		{
 			strength => 0,
 			defence => 0,
-			speed => 0,
 		},
 
 		# The amount of health the character has:
@@ -113,14 +112,12 @@ sub generate_new_stats
 	if($total < 1) { $total = 2 };
 	my $a = int(rand($total - 5) + 5);
 	my $b = int(rand($total - 5) + 5);
-	my $c = int(rand($total - 5) + 5);
-	my $k = (($a + $b + $c) / $total);
-	my @values = map { floor($_ /= $k) } ($a, $b, $c);
+	my $k = (($a + $b) / $total);
+	my @values = map { floor($_ /= $k) } ($a, $b);
 	$self->{stats} =
 	{
 		strength => $values[0],
 		defence => $values[1],
-		speed => $values[2],
 	};
 }
 
