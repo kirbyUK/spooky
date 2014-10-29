@@ -33,7 +33,7 @@ sub main
 	my $costumes = Costume->new;
 
 	# As we defeat enemies, we traverse the costume array to get better ones:
-	my $costume_value = 0;
+	my $costume_pos = 0;
 
 	# Set the player's costume:
 	$player->add_costume($$costumes[0]);
@@ -80,7 +80,7 @@ sub main
 				$enemy->set_position({ x => int(rand($map->get_size->{x})),
 					y => int(rand($map->get_size->{y})) });
 
-				$enemy->generate_new_stats(int(rand(2) * $difficulty_mod * 50));
+				$enemy->generate_new_stats(int(rand(0.2) * $difficulty_mod * 100));
 				push @enemies, $enemy;
 			}
 
@@ -131,6 +131,26 @@ sub main
 					}
 				}
 				shift @encounters;
+
+				# Determine if we're going to have a costume drop:
+				if(rand(1) >= 0.3)
+				{
+					my $new_costume;
+					if(rand(1) <= 0.7)
+					{
+						$new_costume = $costumes->[$costume_pos++];
+					}
+					else
+					{
+						$new_costume = $costumes->[++$costume_pos];
+					}
+					$player->add_costume($new_costume);
+					$interface->set_textbox([{ x => 1, y => 2, text =>
+						"Enemy dropped a new costume!" }]); 
+					&draw;
+					Curses::getch;
+					$interface->reset_textbox;
+				}
 			}
 		}
 
