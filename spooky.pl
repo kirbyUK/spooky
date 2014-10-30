@@ -36,8 +36,7 @@ sub main
 	my $costume_pos = 0;
 
 	# Set the player's costume:
-	$player->add_costume($$costumes[0]);
-	$player->set_costume(0);
+	$player->set_costume($$costumes[0]);
 
 	# Generate a stat spread the player is happy with:
 	$interface->set_textbox([{ text => "Is this stat spread ok? [Y\\n]",
@@ -107,7 +106,7 @@ sub main
 			}
 		}
 		# Otherwise, process the ongoing encounter:
-		else
+		elsif(@encounters > 0)
 		{
 			$interface->set_textbox($encounters[0]->menu);
 			&draw;
@@ -136,20 +135,22 @@ sub main
 				if(rand(1) >= 0.3)
 				{
 					my $new_costume;
-					if(rand(1) <= 0.7)
+					if($costume_pos < @{$costumes})
 					{
-						$new_costume = $costumes->[$costume_pos++];
+						if(rand(1) <= 0.7)
+						{
+							$new_costume = $costumes->[$costume_pos++];
+						}
+						else
+						{
+							$new_costume = $costumes->[++$costume_pos];
+						}
+						$interface->set_textbox([{ x => 1, y => 2, text =>
+							"Enemy dropped a new costume!" }]); 
+						$player->set_costume($new_costume);
+						&draw;
+						$interface->reset_textbox;
 					}
-					else
-					{
-						$new_costume = $costumes->[++$costume_pos];
-					}
-					$player->add_costume($new_costume);
-					$interface->set_textbox([{ x => 1, y => 2, text =>
-						"Enemy dropped a new costume!" }]); 
-					&draw;
-					Curses::getch;
-					$interface->reset_textbox;
 				}
 			}
 		}

@@ -27,9 +27,6 @@ sub new
 		# The amount of candy the player has:
 		candy => 5,
 
-		# A full list of costumes available to the player:
-		costumes => [ ],
-
 		# The character's current costume:
 		costume => { name => "", buffs => { strength => 0, defence => 0 } },
 	};
@@ -149,23 +146,12 @@ sub get_drawable
 		text => $self->symbol };
 }
 
-# Adds a costume to the list of available costumes:
-sub add_costume
-{
-	my $self = shift;
-	my $costume = shift;
-	push @{$self->{costumes}}, $costume;
-}
-
 # Sets the character's costume:
 sub set_costume
 {
 	my $self = shift;
 	my $value = shift;
-	if(defined $self->{costumes}->[$value])
-	{
-		$self->{costume} = $self->{costumes}->[$value];
-	}
+	$self->{costume} = $value;
 }
 
 # Gets the character's costume:
